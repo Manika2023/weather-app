@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3-Day Weather Forecast</title>
+    <style>
+        body{
+            background: rgba(255,255,25,0.79);
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        #temperatureContainer{
+            height: 300px;
+            width: 800px;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            /* background: rgb(178, 178, 229); */
+        }
+       .temperatureBox{
+        margin-top: 2px;
+        height: 200px;
+        /* border: 2px solid salmon; */
+        background: rgba(255, 255, 255, 0.7);
+        text-align: center;
+        border-radius: 6px;
+        width: 200px;
+        margin: 4px;
+       }
+       h1{
+        color: red;
+        font-size: 40px;
+        font-weight: bolder;
+        text-align: center;
+       }
+       h2{
+        color: red;
+        font-size: 35px;
+       }
+       p{
+        color: red;
+        font-size: 30px;
+        font-weight: 800;
+       }
+       .image{
+        height: 50px;
+        width: 50px;
+       }
+       input{
+        font-size: 25px;
+     padding: 10px;
+     border-radius: 25px;
+     border: none;
+     outline: none;
+     box-shadow: 0 0 5px gray;
+       }
+       #search{
+        padding: 10px 33px;
+        border-radius: 5px;
+        background: rgba(255,255,25,0.79);
+        cursor: pointer;
+       }
+       form{
+        display: flex;
+        /* flex-direction: column; */
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+       }
+    </style>
+</head>
+<body style="background-image: url(./backg2.png);">
+    <h1>3-Day Weather Forecast for <span id="cityName"></span></h1>
+    
+   <form action="" id="weatherform">
+    <input type="text" id="searchinput" placeholder="enter the name of city">
+    <input type="submit" value="search" id="search">
+   </form>
+    <!-- Create a container for the temperature boxes -->
+    <div id="temperatureContainer">
+        <div class="temperatureBox">
+            <div class="image" id="image">
+                <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="">
+      </div>
+            <h2>Day 1</h2>
+            <p id="day1Temp"></p>
+        </div>
+        <div class="temperatureBox">
+            <div class="image" id="image">
+                <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="">
+      </div>
+            <h2>Day 2</h2>
+            <p id="day2Temp"></p>
+        </div>
+       
+        <div class="temperatureBox">
+            <div class="image" id="image">
+                <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="">
+      </div>
+            <h2>Day 3</h2>
+            <p id="day3Temp"></p>
+        </div>
+    </div>
+
+    <script>
+
+        function fetchThreeDayForecast(cityName) {
+            const apiKey = "cab4bb42c847cb3de494c80695638b4b";
+            const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${apiKey}&units=metric&cnt=3`;
+
+        //   const apiKey='c4680556a1msh459235ee13125f1p193fa6jsn58133dd1f4f1';
+          // const apiUrl=`https://weatherapi-com.p.rapidapi.com/forecast.json?q=${cityName}&appid=${apiKey}&days=3`
+const images=document.getElementById('image')
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const forecasts = data.list;
+                    
+                    document.getElementById("cityName").innerHTML = cityName;
+                    
+                    // Display temperatures for the next 3 days
+                    for (let i = 0; i < 3; i++) {
+                        const temperature = forecasts[i].main.temp;
+                        document.getElementById(`day${i + 1}Temp`).textContent = `${temperature}°C`;
+          
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+
+
+document.getElementById('weatherform').addEventListener("submit", function(event){
+    event.preventDefault();
+    const statename=document.getElementById('searchinput').value
+    fetchThreeDayForecast(statename)
+})
+    </script>
+</body>
+</html>
